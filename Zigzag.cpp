@@ -94,14 +94,17 @@ void Zigzag::rotate(int Degree) {
 		for (int i = 0; i < SIZE; i++) {
 			x = shape[i].getX();
 			y = shape[i].getY();
-
-			shape[i].setX(x - k);
-			if (i == 1)
-				shape[i].setY(y - k);
-			else
+			if (i == 2) { continue;  }
+			else if (i < 2) {
+				shape[i].setX(x - k + 1);
+				shape[i].setY(y + i);
+			}
+			else 
+			{
+				shape[i].setX(x - k);
 				shape[i].setY(y + k);
-			if (i != 0)
-				k++;
+			}
+			k++;
 		}
 		setDegree(DEG_90);
 
@@ -112,14 +115,16 @@ void Zigzag::rotate(int Degree) {
 		for (int i = 0; i < SIZE; i++) {
 			x = shape[i].getX();
 			y = shape[i].getY();
-			if (i % 2 == 0 || i == 3)
-				shape[i].setX(x - k);
-			else
-				shape[i].setX(x + k);
-
-			shape[i].setY(y - k);
-			if (i != 0)
+			if (i == 2) { continue; }
+			else if (i != 3){
+				shape[i].setX(x - k - 1);
+				shape[i].setY(y - k + 1);
 				k++;
+			}
+			else{
+				shape[i].setX(x - 1);
+				shape[i].setY(y - 1);
+			}
 		}
 		setDegree(DEG_180);
 
@@ -130,15 +135,16 @@ void Zigzag::rotate(int Degree) {
 		for (int i = 0; i < SIZE; i++) {
 			x = shape[i].getX();
 			y = shape[i].getY();
-			if (i % 2 == 0 || i == 3)
-				shape[i].setY(y - k);
-			else
-				shape[i].setY(y + k);
-
-
-			shape[i].setX(x + k);
-			if (i != 0)
+			if (i == 2) { continue; }
+			else if (i != 3) {
+				shape[i].setX(x + k - 1);
+				shape[i].setY(y - k - 1);
 				k++;
+			}
+			else{
+				shape[i].setX(x + 1);
+				shape[i].setY(y - 1);
+			}
 		}
 		setDegree(DEG_270);
 
@@ -149,15 +155,16 @@ void Zigzag::rotate(int Degree) {
 		for (int i = 0; i < SIZE; i++) {
 			x = shape[i].getX();
 			y = shape[i].getY();
-			if (i % 2 == 0 || i == 3)
-				shape[i].setX(x + k);
-			else
-				shape[i].setX(x - k);
-
-
-			shape[i].setY(y + k);
-			if (i != 0)
+			if (i == 2) { continue; }
+			else if (i != 3) {
+				shape[i].setX(x + k + 1);
+				shape[i].setY(y + k - 1);
 				k++;
+			}
+			else {
+				shape[i].setX(x + 1);
+				shape[i].setY(y + 1);
+			}
 		}
 		setDegree(DEG_0);
 
