@@ -1,58 +1,35 @@
 
 #include "GoToXY.h"
 #include "TetrisBoard.h"
+#include "Cube.h"
+#include "Line.h"
 
 
-void Shape::createShape(int whichShape) {
-	int k=1;
-	switch (whichShape) {
-	case CUBE:
-		shape = new Point[4];
-
-		for (int i = 0; i < 4; i++) {
-			if (i % 2 == 0) {
-				shape[i].setX(5);
-				shape[i].setY(k+2);
-			}
-			else {
-				shape[i].setX(6);
-				shape[i].setY(k+2);
-				k--;
-			}
-		}
-		setTexture('%');
-		SIZE = 4;
-		break;
-
-	case LINE:
-		shape = new Point[4];
-		for (int i = 0; i < 4; i++) {
-			shape[i].setX(4 + i);
-			shape[i].setY(2);
-		}
-		SIZE = 4;
-		setTexture('%');
-		break;
-
-	case JOKER:
-		shape = new Point;
-		shape->setX(6);
-		shape->setY(2);
-		setTexture('X');
-		SIZE = 1;
-		break;
-	case BOMB:
-		shape = new Point;
-		shape->setX(6);
-		shape->setY(2);
-		setTexture('@');
-		SIZE = 1;
-		break;
-	}
-	setTextColor(whichColor(whichShape));
-	setShape(whichShape);
-	setPosition(DEG_0);
-}
+//void Shape::createShape(int whichShape) {
+//	int k=1;
+//	switch (whichShape) {
+//	
+//
+//
+//	//case JOKER:
+//	//	shape = new Point;
+//	//	shape->setX(6);
+//	//	shape->setY(2);
+//	//	setTexture('X');
+//	//	SIZE = 1;
+//	//	break;
+//	//case BOMB:
+//	//	shape = new Point;
+//	//	shape->setX(6);
+//	//	shape->setY(2);
+//	//	setTexture('@');
+//	//	SIZE = 1;
+//	//	break;
+//	}
+//	setTextColor(whichColor(whichShape));
+//	setShape(whichShape);
+//	setDegree(DEG_0);
+//}
 
 bool Shape::canTheShapeRotate(const TetrisBoard& board) {
 	int x, y;
@@ -72,164 +49,24 @@ bool Shape::canTheShapeRotate(const TetrisBoard& board) {
 }
 
 
+
 void Shape::move(int direction,const TetrisBoard& board) {
-	int position = getPoisition();
-	int x, y, check = 1;
-
-	for (int j = 0; j < SIZE; j++){
-
-		// if the shape is the Joker AND there is another shape there then print the joker in top of it 
-		if (getShape() == JOKER && board.getCoord(shape[0].getX(),shape[0].getY())){
- 			setTextColor(whichColor(board.getCoord(shape[j].getX(), shape[j].getY())));
-			if (board.getCoord(shape[j].getX(), shape[j].getY()) == JOKER)
-				shape[j].draw('X');
-			 else 	// print the previous shape 
-				shape[j].draw('%');
-
-		} else 
-			shape[j].draw(' ');
-	}
-		
 	
+	int degree = getDegree();
+	int check = 1;
 
-	if (direction != UP){ // the shape won't rotate
+	for (int j = 0; j < SIZE; j++)
+		shape[j].draw(' ');
+
+	if (direction != UP) { // the shape won't rotate
 		for (int j = 0; j < SIZE; j++)
 			shape[j].move(direction);
-	}
-	else {
-		
-		if (currentShape == LINE)
-		{
-			check = canTheShapeRotate(board);
-
-			if (check) {
-				if (position == DEG_0 || position == DEG_180) //faces down
-				{
-					for (int j = 0; j < SIZE; j++) {
-						if (shape[j].getY() == 16 || board.checkBoard(shape[j].getX(), shape[j].getY() + 1)
-							|| board.checkBoard(shape[j].getX(), shape[j].getY() + 2))
-						{
-							for (int i = 0; i < SIZE; i++) {
-								y = shape[i].getY();
-								shape[i].setY(y - 2);
-							}
-							break;
-						}
-					}
-				}
-				else // checking right/left 
-				{
-					for (int j = 0; j < SIZE; j++) {
-						if (shape[j].getX() <= 2 || board.checkBoard(shape[j].getX() - 1, shape[j].getY())
-							|| board.checkBoard(shape[j].getX() - 2, shape[j].getY()))
-						{
-							for (int i = 0; i < SIZE; i++) {
-								x = shape[i].getX();
-								if (position == DEG_90 && x<2)
-									shape[i].setX(x + 2);
-								else
-									shape[i].setX(x + 1);
-							}
-							break;
-						}
-						if (shape[j].getX() >= 9 || board.checkBoard(shape[j].getX() + 1, shape[j].getY())
-							|| board.checkBoard(shape[j].getX() + 2, shape[j].getY()))
-						{
-							for (int i = 0; i < SIZE; i++) {
-								x = shape[i].getX();
-								if (position == DEG_90)
-									shape[i].setX(x - 1);
-								else
-									shape[i].setX(x - 2);
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			if (check)
-				rotate(position);
-			}
 	}
 
 	setTextColor(whichColor());
 	for (int j = 0; j < SIZE; j++)
 		shape[j].draw(getTexture());
-}
 
-void Shape::rotate(int position) {
-
-	int x, y, k = -1 ;
-	switch (position) {
-
-	case DEG_0:
-		// the switch case is future proof
-		switch (getShape())
-		{
-
-		case LINE:
-			for (int i = 0; i < SIZE;i++) {
-				x = shape[i].getX();
-				y = shape[i].getY();
-				shape[i].setX(x - k + 1);
-				shape[i].setY(y + k);
-				k++;
-			}
-			setPosition(DEG_90);
-		}
-		break;
-
-	case DEG_90:
-
-		switch (getShape())
-		{
-
-		case LINE:
-			for (int i = 0; i < SIZE; i++) {
-				x = shape[i].getX();
-				y = shape[i].getY();
-				shape[i].setX(x - k);
-				shape[i].setY(y - k + 1);
-				k++;
-			}
-			setPosition(DEG_180);
-		}
-		break;
-
-	case DEG_180:
-
-		switch (getShape())
-		{
-		case LINE:
-			for (int i = 0; i < SIZE;i++) {
-				x = shape[i].getX();
-				y = shape[i].getY();
-				shape[i].setX(x + k - 1);
-				shape[i].setY(y - k);
-				k++;
-			}
-			setPosition(DEG_270);
-		}
-		break;
-
-	case DEG_270:
-
-		switch (getShape())
-		{
-		case LINE:
-			for (int i = 0; i < SIZE;i++) {
-				x = shape[i].getX();
-				y = shape[i].getY();
-				shape[i].setX(x + k);
-				shape[i].setY(y+ k - 1);
-				k++;
-			}
-			setPosition(DEG_0);
-		}
-
-		break;
-	}
 	
 }
 
@@ -296,10 +133,10 @@ void Shape::getMinMaxShape(int& minY, int& maxY) {
 	}
 }
 
-Color Shape::whichColor(int theShapeNum) {
+Color Shape::whichColor(int theShapeNum) const {
 	
-		if (theShapeNum == 0)
-			theShapeNum = currentShape;
+		if (theShapeNum == 9999)
+			theShapeNum = shapeType;
 		switch (theShapeNum) {
 		case CUBE:
 			return LIGHTMAGENTA;
@@ -309,8 +146,14 @@ Color Shape::whichColor(int theShapeNum) {
 			return YELLOW;
 		case BOMB:
 			return LIGHTRED;
+		case ZIGZAG:
+			return GREEN;
+		case TEE:
+			return LIGHTGREEN;
+		case GUN:
+			return LIGHTBLUE;
 		default:
-			return DARKGREY;
+			return GREEN;
 		}
 
 }

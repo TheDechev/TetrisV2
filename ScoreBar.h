@@ -28,7 +28,7 @@ public:
 
 	void printSpeed();
 
-	void setLinesDeleted(int howMany, const Shape& currentShape);
+	void setLinesDeleted(int howMany, const Shape* currentShape);
 
 	void printParts(){
 		setTextColor(WHITE);
@@ -46,7 +46,7 @@ public:
 	
 	int getMax(int x) { return maxValueY[x - 1]; }
 
-	void setDistance(Shape& currentShape, int minYshape);
+	void setDistance(Shape* currentShape, int minYshape);
 
 	int getDistance(){ return distance; }
 

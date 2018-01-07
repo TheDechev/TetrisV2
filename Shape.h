@@ -1,6 +1,5 @@
 #ifndef _Shape_H
 #define _Shape_H
-
 #include "Point.h"
 #include "Config.h"
 #include "GoToXY.h"
@@ -8,38 +7,45 @@ class TetrisBoard;		// Foward decleration for TetrisBoard
 
 class Shape{
 private:
-	int currentShape;	// Current shape type
-	int position;		// Current
+	
+	int shapeType;	// Current shape type
+	int Degree;		// Current
 	char texture;		// Shape texture to print 
 public:
-	Point* shape;
+
 	enum {DEG_0,DEG_90,DEG_180,DEG_270};
-	enum { DOWN, LEFT, UP, RIGHT, CUBE = 10, LINE = 11, JOKER = 12, BOMB = 13};
+	enum { DOWN, LEFT, UP, RIGHT, DEFAULT_SIZE, CUBE = 10, LINE , JOKER , BOMB ,ZIGZAG, GUN, TEE};
+	Point shape[DEFAULT_SIZE];
 	int SIZE;
 
-	void setPosition(int pos) {
-		position = pos;
+	Shape(){
+		setDegree(DEG_0);
+		setTexture('%');
 	}
-	int getPoisition() {
-		return position;
+	void setDegree(int pos) {
+		Degree = pos;
+	}
+	int getDegree() {
+		return Degree;
 	}
 	int getShape() const {
-		return currentShape;
+		return shapeType;
 	}
 	void setShape(int whichShape) {
-		currentShape = whichShape;
+		shapeType = whichShape;
 	}
-	void createShape(int whichShape);
+	void createNewShape(int whichShape);
 
-	void deleteShape() {
-		if (getShape() == BOMB){
-			gotoxy(shape[0].getX(), shape[0].getY());
-			cout << " ";
-		}
-		delete[] shape;
-	}
-	void move(int direction, const TetrisBoard& board);
-	void rotate(int position);
+	//void deleteShape() {
+	//	if (getShape() == BOMB){
+	//		gotoxy(shape[0].getX(), shape[0].getY());
+	//		cout << " ";
+	//	}
+	//	delete[] shape;
+	//}
+	virtual void move(int direction, const TetrisBoard& board);
+	virtual void rotate(int Degree) { }
+
 	void setTexture(char ch){
 		this->texture = ch;
 	}
@@ -54,7 +60,7 @@ public:
 	bool checkBomb(int direction, TetrisBoard& board, int& howManyBombed);
 	int activateBomb(int x, int y, TetrisBoard& board);
 
-	Color whichColor(int theShapeNum=0);
+	Color whichColor(int theShapeNum=9999) const;
 
 	bool canTheShapeRotate(const TetrisBoard& board);
 };

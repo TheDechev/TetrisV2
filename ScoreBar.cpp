@@ -35,14 +35,14 @@ void Score::printSpeed() {
 	}
 }
 
-void Score::setLinesDeleted(int howMany, const Shape& currentShape) {
+void Score::setLinesDeleted(int howMany, const Shape* currentShape) {
 
 	switch (howMany) {
 	case 0:
 		linesDeleted = 0;
 		break;
 	case 1:
-		if (currentShape.getShape() == Shape::JOKER)
+		if (currentShape->getShape() == Shape::JOKER)
 			linesDeleted = 50;
 		else
 			linesDeleted = 100;
@@ -59,11 +59,11 @@ void Score::setLinesDeleted(int howMany, const Shape& currentShape) {
 	}
 }
 
-void Score::setDistance(Shape& currentShape, int minYshape) {
+void Score::setDistance(Shape* currentShape, int minYshape) {
 	
 		int currentMax = ROWS + Board_Gap, currentX;
-		for (int i = 0; i < currentShape.SIZE; i++) {
-			currentX = currentShape.shape[i].getX();
+		for (int i = 0; i < currentShape->SIZE; i++) {
+			currentX = currentShape->shape[i].getX();
 			if (getMax(currentX)<currentMax)
 				currentMax = getMax(currentX);
 		}

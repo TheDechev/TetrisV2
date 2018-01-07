@@ -11,7 +11,7 @@ using namespace std;
 class TetrisGame
 {
 	enum { invalid_Key = -1, ESC=27,SPACE_key=32, s_key=115, S_key=83, ONE=49, TWO=50, THREE=51, FOUR=52, DOWN_KEY = 80, LEFT_KEY=75, UP_KEY=72, RIGHT_KEY=77, PAUSED, PLAYING, END_GAME, CONTINUE_GAME = 0};
-	Shape currentShape;
+	Shape* currentShape;
 	char keyboards[11];
 	int Board[COLUMN][ROW], gameStarted = 0;
 public:
@@ -35,12 +35,12 @@ public:
 
 	}
 	int randomNum(){
-		int res = rand() % 100;
-		if (res < 70)
-			res = rand() % 2 + 10;
-		else
-			res = rand() % 2 + 12;
-		return res;
+		//int res = rand() % 100;
+		//if (res < 70)
+		//	res = rand() % 2 + 10;
+		//else
+		//	res = rand() % 2 + 12;
+		return  rand() % 2 + 10;
 	}
 
 	int dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeInterval, int& isBombed, int&minY, int& maxY, int& howManyBombed);
@@ -100,12 +100,14 @@ public:
 	}
 
 	void hardDrop(Score& scoreStatus, int& timeInterval,unsigned long int& currentTime,int& minY, int& maxY) {
-		currentShape.getMinMaxShape(minY, maxY);
+		currentShape->getMinMaxShape(minY, maxY);
 		scoreStatus.setDistance(currentShape, minY);
 		scoreStatus.updateScoreValue(2 * scoreStatus.getDistance()); // hard drop 
 		currentTime -= 800;
 		timeInterval = 0;
 	}
+
+	void createNewShape(int whichShape);
 };
 
 #endif

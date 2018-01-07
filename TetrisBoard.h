@@ -12,11 +12,11 @@ public:
 	
 	TetrisBoard(){ setBoard(); }
 
-	void printBoard(int currentY);
+	void printBoard(int currentY, const Shape* current);
 
 	void setBoard();
 
-	void updateBoard(Shape current);
+	void updateBoard(Shape* current);
 
 	void setCoord(int _x, int _y, int val){
 		Board[_y - Board_Gap][_x - 1] = val;
@@ -31,7 +31,7 @@ public:
 
 	bool checkEndGame();
 
-	int checkPos(const Shape& current, int direction);
+	int checkPos(const Shape* current, int direction);
 
 	bool checkBoard(int _x, int _y) const{
 		 if (getCoord(_x,_y))
@@ -43,7 +43,7 @@ public:
 
 	bool checkLine(int currentY);
 
-	int deleteLines(const Shape& current, int minY, int maxY);
+	int deleteLines(const Shape* current, int minY, int maxY);
 
 };
 

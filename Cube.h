@@ -1,30 +1,31 @@
-#ifndef _Cube
-#define _Cube
-#include "Point.h"
+#ifndef _Cube_H
+#define _Cube_H
 #include <iostream>
-#include "Config.h"
+#include "Shape.h"
 
 using namespace std;
 
-class Cube{
+class Cube: public Shape{
 	
 public:
-	enum { SIZE = 4, DEFAULT = -999, LEFT = 1, RIGHT = 3 };
-	Point square[SIZE];
-	int direction;
-	void setColor(Color c);
-	void move(int direction=DEFAULT);
-	
-	void setCube(){
-		square[0].setX(7);
-		square[0].setY(0);
-		square[1].setX(8);
-		square[1].setY(0);
-		square[2].setX(7);
-		square[2].setY(0);
-		square[3].setX(8);
-		square[3].setY(0);
-	}
+	Cube() {
+		setShape(CUBE);
+		int k = 1;
+		SIZE = 4;
+		for (int i = 0; i < SIZE; i++) {
+			if (i % 2 == 0) {
+				shape[i].setX(5);
+				shape[i].setY(k + 2);
+			}
+			else {
+				shape[i].setX(6);
+				shape[i].setY(k + 2);
+				k--;
+			}
+		}
+		setTextColor(whichColor(CUBE));
+		setShape(CUBE);
+	};
 
 };
 

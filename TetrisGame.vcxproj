@@ -79,7 +79,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="ScoreBar.h" />
+    <ClInclude Include="Tee.h" />
     <ClInclude Include="TetrisBoard.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Config.h" />
@@ -87,15 +90,24 @@
     <ClInclude Include="Point.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="TetrisGame.h" />
+    <ClInclude Include="Zigzag.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="ScoreBar.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Tee.cpp" />
     <ClCompile Include="TetrisBoard.cpp" />
     <ClCompile Include="GoToXY.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TetrisGame.cpp" />
+    <ClCompile Include="Zigzag.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Gun.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,14 +1,18 @@
 #ifndef _Line_H
 #define _Line_H
+#include <iostream>
+#include "Shape.h"
+using namespace std;
 
-#include "Config.h"
-#include "Point.h"
+class TetrisBoard;		// Foward decleration for TetrisBoard	
 
-class Line{
 
-	enum {SIZE=4};
+class Line : public Shape {
+
 public:
-	Point line[SIZE];
+	void move(int direction, const TetrisBoard& board);
+	Line();
+	void rotate(int Degree);
 };
 
-#endif _Line_H
+#endif

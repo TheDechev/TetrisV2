@@ -1,35 +1,35 @@
 #include "TetrisBoard.h"
 #include "GoToXY.h"
 
-int TetrisBoard::checkPos(const Shape& current, int direction){
+int TetrisBoard::checkPos(const Shape* current, int direction){
 	int x, y;
 	switch (direction){
 	case Shape::LEFT:
 
-		for (int i = 0; i < current.SIZE;i++) {
-			x = current.shape[i].getX() - 1;
-			y = current.shape[i].getY();
+		for (int i = 0; i < current->SIZE;i++) {
+			x = current->shape[i].getX() - 1;
+			y = current->shape[i].getY();
 			if (x == 0)
 				return BOTTOM_ENCOUNTER;
-			else if(Board[y - Board_Gap][x - 1] != 0 && current.getShape()!=Shape::JOKER)
+			else if(Board[y - Board_Gap][x - 1] != 0 && current->getShape()!=Shape::JOKER)
 				return SHAPE_ENCOUNTER;
 
 		}
 		break;
 	case Shape::RIGHT:
-		for (int i = 0; i < current.SIZE;i++) {
-			x = current.shape[i].getX() + 1;
-			y = current.shape[i].getY();
+		for (int i = 0; i < current->SIZE;i++) {
+			x = current->shape[i].getX() + 1;
+			y = current->shape[i].getY();
 			if (x == 11)
 				return BOTTOM_ENCOUNTER;
-			else if (Board[y - Board_Gap][x - 1] != 0 && current.getShape() != Shape::JOKER)
+			else if (Board[y - Board_Gap][x - 1] != 0 && current->getShape() != Shape::JOKER)
 				return SHAPE_ENCOUNTER;
 		}
 		break;
 	case Shape::DOWN:
-		for (int i = 0; i < current.SIZE;i++) {
-			x = current.shape[i].getX();
-			y = current.shape[i].getY() + 1;
+		for (int i = 0; i < current->SIZE;i++) {
+			x = current->shape[i].getX();
+			y = current->shape[i].getY() + 1;
 			if (y == 18)
 				return BOTTOM_ENCOUNTER;
 			else if(Board[y - Board_Gap][x - 1] != 0)
@@ -50,7 +50,7 @@ bool TetrisBoard::checkLine(int currentY){
 
 }
 
-int TetrisBoard::deleteLines(const Shape& current, int minY, int maxY){
+int TetrisBoard::deleteLines(const Shape* current, int minY, int maxY){
 
 
 	int currentY = minY, howManyDel = 0, temp;
@@ -74,7 +74,7 @@ int TetrisBoard::deleteLines(const Shape& current, int minY, int maxY){
 				}
 			}
 			Sleep(250);
-			printBoard(currentY);
+			printBoard(currentY, current);
 			howManyDel++;
 			maxY++;
 
@@ -103,37 +103,33 @@ bool TetrisBoard::checkEndGame() {
 	return FALSE;
 }
 
-void TetrisBoard::updateBoard(Shape current) {
+void TetrisBoard::updateBoard(Shape* current) {
 	int x, y;
-	for (int i = 0; i < current.SIZE; i++) {
-		x = current.shape[i].getX();
-		y = current.shape[i].getY();
-		Board[y - Board_Gap][x - 1] = current.getShape();
+	for (int i = 0; i < current->SIZE; i++) {
+		x = current->shape[i].getX();
+		y = current->shape[i].getY();
+		Board[y - Board_Gap][x - 1] = current->getShape();
 	}
 }
 
-void TetrisBoard::printBoard(int currentY) {
+void TetrisBoard::printBoard(int currentY, const Shape* current) {
+	int texture;
 	for (int y = currentY; y > Board_Gap; y--) {
 		for (int x = 1; x <= COLUMNS; x++) {
 			gotoxy(x, y);
-			switch (getCoord(x, y)) {
+			texture = getCoord(x, y);
+			setTextColor(current->whichColor(texture));
 
-			case Shape::LINE:
-				setTextColor(LIGHTCYAN);
-				cout << "%";
-				break;
-			case Shape::CUBE:
-				setTextColor(LIGHTMAGENTA);
-				cout << "%";
-				break;
+			switch (texture) {
 			case Shape::JOKER:
-				setTextColor(YELLOW);
 				cout << "X";
+				break;
+			case Shape::LINE : case Shape::CUBE : case Shape::GUN:
+				cout << "%";
 				break;
 			default:
 				cout << " ";
 				break;
-
 			}
 		}
 	}
