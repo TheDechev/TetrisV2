@@ -3,6 +3,7 @@
 #include "Cube.h"
 #include "Gun.h"
 #include "Tee.h"
+#include "Zigzag.h"
 #include "ScoreBar.h"
 #include "GoToXY.h"
 #include "Config.h"
@@ -69,6 +70,9 @@ void TetrisGame::createNewShape(int whichShape)
 	case Shape::TEE:
 		currentShape = new Tee;
 		break;
+	case Shape::ZIGZAG:
+		currentShape = new Zigzag;
+		break;
 	//case Shape::JOKER:
 	//	currentShape = new Joker;
 	//	break;
@@ -105,8 +109,7 @@ void TetrisGame::initGame(){
 	scoreStatus.printScore();
 	scoreStatus.printSpeed();
 	scoreStatus.printParts();
-	//currentShape.createShape(rand() % 2 + 10);
-	createNewShape( 16);
+	createNewShape( 14);
 
 
 	while (true) // the game runs as long as the user doesn't press 9 or the game ends

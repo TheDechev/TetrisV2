@@ -8,7 +8,9 @@ class Zigzag : public Shape {
 
 public:
 
-
+	Zigzag();
+	void move(int direction, const TetrisBoard& board);
+	void rotate(int Degree);
 };
 
 #endif

@@ -151,14 +151,6 @@ void Tee::rotate(int Degree) {
 		for (int i = 0; i < SIZE; i++) {
 			x = shape[i].getX();
 			y = shape[i].getY();
-			//if (i != 3){
-			//	shape[i].setY(y-1);
-			//	shape[i].setX(x + 1 + k);
-			//}
-			//if ()
-			//{
-
-			//}
 			if (i % 2 == 0 || i == 3)
 				shape[i].setX(x + k);
 			else
