@@ -124,7 +124,7 @@ void TetrisBoard::printBoard(int currentY, const Shape* current) {
 			case Shape::JOKER:
 				cout << "X";
 				break;
-			case Shape::LINE : case Shape::CUBE : case Shape::GUN:
+			case Shape::LINE : case Shape::CUBE : case Shape::GUN: case Shape::ZIGZAG : case Shape::TEE:
 				cout << "%";
 				break;
 			default:

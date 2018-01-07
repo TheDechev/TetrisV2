@@ -256,7 +256,7 @@ void TetrisGame::newRound(int& isBombed, int& timeInterval, TetrisBoard& board, 
 	scoreStatus.printScore();
 	whichShape = randomNum(); 
 	delete currentShape;
-	createNewShape(rand() % 2 + 10); // creates a new shape randomly
+	createNewShape(whichShape); // creates a new shape randomly
 	currentShape->move(Shape::DOWN, board);
 }
 
