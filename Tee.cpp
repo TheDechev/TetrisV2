@@ -87,82 +87,82 @@ void Tee::move(int direction, const TetrisBoard& board) {
 		shape[j].draw(getTexture());
 }
 
-void Tee::rotate(int Degree) {
-	int x, y, k = -1;
-	switch (Degree) {
-
-	case DEG_0:
-
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-
-			shape[i].setX(x - k );
-			if (i == 1)
-				shape[i].setY(y - k);
-			else
-				shape[i].setY(y + k);
-			if(i!=0)
-				k++;
-		}
-		setDegree(DEG_90);
-
-		break;
-
-	case DEG_90:
-
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			if(i%2==0 || i==3)
-				shape[i].setX(x - k);
-			else
-				shape[i].setX(x + k);
-			
-			shape[i].setY(y - k);
-			if (i != 0)
-				k++;
-		}
-		setDegree(DEG_180);
-
-		break;
-
-	case DEG_180:
-
-		for (int  i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			if (i % 2 == 0 || i==3)
-				shape[i].setY(y - k);
-			else
-				shape[i].setY(y + k);
-
-
-			shape[i].setX(x + k);
-			if(i!=0)
-				k++;
-		}
-		setDegree(DEG_270);
-
-		break;
-
-	case DEG_270:
-
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			if (i % 2 == 0 || i == 3)
-				shape[i].setX(x + k);
-			else
-				shape[i].setX(x - k);
-
-
-			shape[i].setY(y + k);
-			if (i != 0)
-				k++;
-		}
-		setDegree(DEG_0);
-
-		break;
-	}
-}
+//void Tee::rotate(int Degree) {
+//	int x, y, k = -1;
+//	switch (Degree) {
+//
+//	case DEG_0:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//
+//			shape[i].setX(x - k );
+//			if (i == 1)
+//				shape[i].setY(y - k);
+//			else
+//				shape[i].setY(y + k);
+//			if(i!=0)
+//				k++;
+//		}
+//		setDegree(DEG_90);
+//
+//		break;
+//
+//	case DEG_90:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			if(i%2==0 || i==3)
+//				shape[i].setX(x - k);
+//			else
+//				shape[i].setX(x + k);
+//			
+//			shape[i].setY(y - k);
+//			if (i != 0)
+//				k++;
+//		}
+//		setDegree(DEG_180);
+//
+//		break;
+//
+//	case DEG_180:
+//
+//		for (int  i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			if (i % 2 == 0 || i==3)
+//				shape[i].setY(y - k);
+//			else
+//				shape[i].setY(y + k);
+//
+//
+//			shape[i].setX(x + k);
+//			if(i!=0)
+//				k++;
+//		}
+//		setDegree(DEG_270);
+//
+//		break;
+//
+//	case DEG_270:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			if (i % 2 == 0 || i == 3)
+//				shape[i].setX(x + k);
+//			else
+//				shape[i].setX(x - k);
+//
+//
+//			shape[i].setY(y + k);
+//			if (i != 0)
+//				k++;
+//		}
+//		setDegree(DEG_0);
+//
+//		break;
+//	}
+//}

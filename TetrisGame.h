@@ -40,7 +40,7 @@ public:
 		//	res = rand() % 2 + 10;
 		//else
 		//	res = rand() % 2 + 12;
-		return  rand() % 4 + 10;
+		return  rand() % 4 + 11;
 	}
 
 	int dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeInterval, int& isBombed, int&minY, int& maxY, int& howManyBombed);

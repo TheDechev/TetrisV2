@@ -42,13 +42,12 @@ bool Shape::canTheShapeRotate(const TetrisBoard& board) {
 			|| (board.checkBoard(x + 2, y) && board.checkBoard(x - 1, y))
 			|| (board.checkBoard(x + 1, y) && board.checkBoard(x - 2, y))
 			|| (x >= COLUMNS - 2 && board.checkBoard(x - 1, y)) // close to a wall from the right + a shape in the left
-			|| (x <= 1 && board.checkBoard(x + 1, y))) // close to a wall in the left + a shape in the right
+			|| (x <= 1 && board.checkBoard(x + 1, y)) // close to a wall in the left + a shape in the right
+			|| y<=Board_Gap)
 			return false;
 	}
 	return true;
 }
-
-
 
 void Shape::move(int direction,const TetrisBoard& board) {
 	
@@ -156,4 +155,19 @@ Color Shape::whichColor(int theShapeNum) const {
 			return GREEN;
 		}
 
+}
+
+void Shape:: rotate(int Degree) { 
+
+	int centerY = shape[2].getY(), centerX = shape[2].getX();
+	int x_new, y_new, x_old, y_old, center = centerX + centerY;
+	
+	for (int i = 0; i < SIZE; i++) {
+		x_old = shape[i].getX();
+		y_old = shape[i].getY();
+		x_new = center - y_old;
+		y_new = centerY - centerX + x_old;
+		shape[i].setX(x_new);
+		shape[i].setY(y_new);
+	}
 }

@@ -18,6 +18,7 @@ Zigzag::Zigzag() {
 	setTextColor(whichColor(TEE));
 	setShape(TEE);
 }
+
 void Zigzag::move(int direction, const TetrisBoard& board) {
 	int degree = getDegree();
 	int x, y, check = 1;
@@ -85,89 +86,90 @@ void Zigzag::move(int direction, const TetrisBoard& board) {
 	for (int j = 0; j < SIZE; j++)
 		shape[j].draw(getTexture());
 }
-void Zigzag::rotate(int Degree) {
-	int x, y, k = -1;
-	switch (Degree) {
 
-	case DEG_0:
-
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			if (i == 2) { continue;  }
-			else if (i < 2) {
-				shape[i].setX(x - k + 1);
-				shape[i].setY(y + i);
-			}
-			else 
-			{
-				shape[i].setX(x - k);
-				shape[i].setY(y + k);
-			}
-			k++;
-		}
-		setDegree(DEG_90);
-
-		break;
-
-	case DEG_90:
-
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			if (i == 2) { continue; }
-			else if (i != 3){
-				shape[i].setX(x - k - 1);
-				shape[i].setY(y - k + 1);
-				k++;
-			}
-			else{
-				shape[i].setX(x - 1);
-				shape[i].setY(y - 1);
-			}
-		}
-		setDegree(DEG_180);
-
-		break;
-
-	case DEG_180:
-
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			if (i == 2) { continue; }
-			else if (i != 3) {
-				shape[i].setX(x + k - 1);
-				shape[i].setY(y - k - 1);
-				k++;
-			}
-			else{
-				shape[i].setX(x + 1);
-				shape[i].setY(y - 1);
-			}
-		}
-		setDegree(DEG_270);
-
-		break;
-
-	case DEG_270:
-
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			if (i == 2) { continue; }
-			else if (i != 3) {
-				shape[i].setX(x + k + 1);
-				shape[i].setY(y + k - 1);
-				k++;
-			}
-			else {
-				shape[i].setX(x + 1);
-				shape[i].setY(y + 1);
-			}
-		}
-		setDegree(DEG_0);
-
-		break;
-	}
-}
+//void Zigzag::rotate(int Degree) {
+//	int x, y, k = -1;
+//	switch (Degree) {
+//
+//	case DEG_0:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			if (i == 2) { continue;  }
+//			else if (i < 2) {
+//				shape[i].setX(x - k + 1);
+//				shape[i].setY(y + i);
+//			}
+//			else 
+//			{
+//				shape[i].setX(x - k);
+//				shape[i].setY(y + k);
+//			}
+//			k++;
+//		}
+//		setDegree(DEG_90);
+//
+//		break;
+//
+//	case DEG_90:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			if (i == 2) { continue; }
+//			else if (i != 3){
+//				shape[i].setX(x - k - 1);
+//				shape[i].setY(y - k + 1);
+//				k++;
+//			}
+//			else{
+//				shape[i].setX(x - 1);
+//				shape[i].setY(y - 1);
+//			}
+//		}
+//		setDegree(DEG_180);
+//
+//		break;
+//
+//	case DEG_180:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			if (i == 2) { continue; }
+//			else if (i != 3) {
+//				shape[i].setX(x + k - 1);
+//				shape[i].setY(y - k - 1);
+//				k++;
+//			}
+//			else{
+//				shape[i].setX(x + 1);
+//				shape[i].setY(y - 1);
+//			}
+//		}
+//		setDegree(DEG_270);
+//
+//		break;
+//
+//	case DEG_270:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			if (i == 2) { continue; }
+//			else if (i != 3) {
+//				shape[i].setX(x + k + 1);
+//				shape[i].setY(y + k - 1);
+//				k++;
+//			}
+//			else {
+//				shape[i].setX(x + 1);
+//				shape[i].setY(y + 1);
+//			}
+//		}
+//		setDegree(DEG_0);
+//
+//		break;
+//	}
+//}

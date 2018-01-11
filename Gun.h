@@ -9,7 +9,7 @@ class Gun : public Shape {
 public:
 	Gun();
 	void move(int direction, const TetrisBoard& board);
-	void rotate(int Degree);
+
 };
 
 #endif

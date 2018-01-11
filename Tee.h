@@ -10,7 +10,7 @@ public:
 
 	Tee();
 	void move(int direction, const TetrisBoard& board);
-	void rotate(int Degree);
+
 };
 
 #endif

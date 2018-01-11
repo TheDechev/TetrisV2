@@ -44,7 +44,7 @@ public:
 	//	delete[] shape;
 	//}
 	virtual void move(int direction, const TetrisBoard& board);
-	virtual void rotate(int Degree) { }
+	virtual void rotate(int Degree);
 
 	void setTexture(char ch){
 		this->texture = ch;

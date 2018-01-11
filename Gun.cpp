@@ -85,68 +85,70 @@ void Gun::move(int direction, const TetrisBoard& board) {
 		shape[j].draw(getTexture());
 }
 
-void Gun::rotate(int Degree) {
-	int x, y, k = -1;
-	switch (Degree) {
 
-	case DEG_0:
 
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			shape[i].setX(x - k + 1);
-			if (i != 0)
-				shape[i].setY(y + k - 1);
-			
-			k++;
-		}
-			setDegree(DEG_90);
-
-			break;
-
-	case DEG_90:
-
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			if(i!=0)
-				shape[i].setX(x - k + 1);
-			shape[i].setY(y - k + 1);
-			k++;
-		}
-		setDegree(DEG_180);
-
-		break;
-
-	case DEG_180:
-
-		for (int i = SIZE-1; i >= 0; i--) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			shape[i].setX(x - k);
-			if(i!=0)
-				shape[i].setY(y + k);
-			k++;
-		}
-		setDegree(DEG_270);
-
-		break;
-
-	case DEG_270:
-
-		for (int i = 0; i < SIZE; i++) {
-			x = shape[i].getX();
-			y = shape[i].getY();
-			if(i!=0)
-				shape[i].setX(x + k - 1);
-			shape[i].setY(y + k - 1);
-			k++;
-		}
-		setDegree(DEG_0);
-
-		break;
-	}
-	
-}
+//void Gun::rotate(int Degree) {
+//	int x, y, k = -1;
+//	switch (Degree) {
+//
+//	case DEG_0:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			shape[i].setX(x - k + 1);
+//			if (i != 0)
+//				shape[i].setY(y + k - 1);
+//			
+//			k++;
+//		}
+//			setDegree(DEG_90);
+//
+//			break;
+//
+//	case DEG_90:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			if(i!=0)
+//				shape[i].setX(x - k + 1);
+//			shape[i].setY(y - k + 1);
+//			k++;
+//		}
+//		setDegree(DEG_180);
+//
+//		break;
+//
+//	case DEG_180:
+//
+//		for (int i = SIZE-1; i >= 0; i--) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			shape[i].setX(x - k);
+//			if(i!=0)
+//				shape[i].setY(y + k);
+//			k++;
+//		}
+//		setDegree(DEG_270);
+//
+//		break;
+//
+//	case DEG_270:
+//
+//		for (int i = 0; i < SIZE; i++) {
+//			x = shape[i].getX();
+//			y = shape[i].getY();
+//			if(i!=0)
+//				shape[i].setX(x + k - 1);
+//			shape[i].setY(y + k - 1);
+//			k++;
+//		}
+//		setDegree(DEG_0);
+//
+//		break;
+//	}
+//	
+//}
 
 

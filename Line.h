@@ -12,7 +12,6 @@ class Line : public Shape {
 public:
 	void move(int direction, const TetrisBoard& board);
 	Line();
-	void rotate(int Degree);
 };
 
 #endif
