@@ -9,8 +9,9 @@ class Tee : public Shape {
 public:
 
 	Tee();
-	void move(int direction, const TetrisBoard& board);
+	int move(int direction,  TetrisBoard& board);
 	void rotate(int Degree);
+
 };
 
 #endif

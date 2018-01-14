@@ -35,15 +35,15 @@ public:
 
 	}
 	int randomNum(){
-		//int res = rand() % 100;
-		//if (res < 70)
-		//	res = rand() % 2 + 10;
-		//else
-		//	res = rand() % 2 + 12;
-		return  rand() % 4 + 10;
+		int res = rand() % 100;
+		if (res < 70)
+			res = rand() % 5 + 10;
+		else
+			res = rand() % 2 + 15;
+		return  res;
 	}
 
-	int dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeInterval, int& isBombed, int&minY, int& maxY, int& howManyBombed);
+	int dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeInterval, int& isBombed, int&minY, int& maxY);
 
 
 	void printMenu();
@@ -78,7 +78,7 @@ public:
 		return false;
 	}
 
-	void newRound(int& isBombed, int& timeInterval, TetrisBoard& board, int& minY, int& maxY, Score& scoreStatus, int& howManyBombed, int& whichShape);
+	void newRound(int& isBombed, int& timeInterval, TetrisBoard& board, int& minY, int& maxY, Score& scoreStatus, int& whichShape);
 
 	void changeSpeed(char indicator, int& timeInterval, Score& scoreStatus) {
 

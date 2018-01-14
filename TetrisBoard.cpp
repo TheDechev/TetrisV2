@@ -30,7 +30,7 @@ int TetrisBoard::checkPos(const Shape* current, int direction){
 		for (int i = 0; i < current->SIZE;i++) {
 			x = current->shape[i].getX();
 			y = current->shape[i].getY() + 1;
-			if (y == 18)
+			if (y == ROWS+Board_Gap)
 				return BOTTOM_ENCOUNTER;
 			else if(Board[y - Board_Gap][x - 1] != 0)
 				return SHAPE_ENCOUNTER;

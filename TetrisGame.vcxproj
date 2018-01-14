@@ -79,7 +79,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Joker.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="ScoreBar.h" />
     <ClInclude Include="Tee.h" />
@@ -93,8 +95,10 @@
     <ClInclude Include="Zigzag.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="Joker.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="ScoreBar.cpp" />

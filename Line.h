@@ -10,9 +10,10 @@ class TetrisBoard;		// Foward decleration for TetrisBoard
 class Line : public Shape {
 
 public:
-	void move(int direction, const TetrisBoard& board);
+	int move(int direction,  TetrisBoard& board);
 	Line();
 	void rotate(int Degree);
+
 };
 
 #endif

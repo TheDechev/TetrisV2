@@ -12,9 +12,10 @@ private:
 	int Degree;		// Current
 	char texture;		// Shape texture to print 
 public:
-
+	enum{START_X = 6, START_Y = 2};
 	enum {DEG_0,DEG_90,DEG_180,DEG_270};
-	enum { DOWN, LEFT, UP, RIGHT, DEFAULT_SIZE, CUBE = 10, LINE ,ZIGZAG, GUN, TEE, JOKER, BOMB};
+	enum { CUBE = 10, LINE ,ZIGZAG, GUN, TEE, JOKER, BOMB};
+	enum{ DOWN, LEFT, UP, RIGHT, DEFAULT_SIZE, };
 	Point shape[DEFAULT_SIZE];
 	int SIZE;
 
@@ -22,47 +23,38 @@ public:
 		setDegree(DEG_0);
 		setTexture('%');
 	}
-	void setDegree(int pos) {
-		Degree = pos;
-	}
-	int getDegree() {
-		return Degree;
-	}
-	int getShape() const {
-		return shapeType;
-	}
-	void setShape(int whichShape) {
-		shapeType = whichShape;
-	}
-	void createNewShape(int whichShape);
 
-	//void deleteShape() {
-	//	if (getShape() == BOMB){
-	//		gotoxy(shape[0].getX(), shape[0].getY());
-	//		cout << " ";
-	//	}
-	//	delete[] shape;
-	//}
-	virtual void move(int direction, const TetrisBoard& board);
+	virtual int move(int direction,  TetrisBoard& board);
 	virtual void rotate(int Degree) { }
-
-	void setTexture(char ch){
-		this->texture = ch;
-	}
-
-	char getTexture(){
-		return texture;
-	}
-
 	void getMinMaxShape(int& minY, int& maxY);
-	
-
-	bool checkBomb(int direction, TetrisBoard& board, int& howManyBombed);
-	int activateBomb(int x, int y, TetrisBoard& board);
 
 	Color whichColor(int theShapeNum=9999) const;
 
 	bool canTheShapeRotate(const TetrisBoard& board);
+
+	void setDegree(int pos) {
+		Degree = pos;
+	}
+
+	int getDegree() {
+		return Degree;
+	}
+
+	int getShape()const {
+		return shapeType;
+	}
+
+	void setShape(int whichShape) {
+		shapeType = whichShape;
+	}
+
+	void setTexture(char ch) {
+		this->texture = ch;
+	}
+
+	char getTexture() {
+		return texture;
+	}
 };
 
 #endif _Shape_H

@@ -4,11 +4,13 @@
 #include "Gun.h"
 #include "Tee.h"
 #include "Zigzag.h"
+#include "Bomb.h"
+#include "Joker.h"
 #include "ScoreBar.h"
-#include "GoToXY.h"
 #include "Config.h"
 #include "TetrisBoard.h"
 #include <thread>
+#include <typeinfo>
 #include <chrono>
 
 
@@ -73,12 +75,12 @@ void TetrisGame::createNewShape(int whichShape)
 	case Shape::ZIGZAG:
 		currentShape = new Zigzag;
 		break;
-	//case Shape::JOKER:
-	//	currentShape = new Joker;
-	//	break;
-	//case Shape::BOMB:
-	//	currentShape = new Bomb;
-	//	break;
+	case Shape::JOKER:
+		currentShape = new Joker;
+		break;
+	case Shape::BOMB:
+		currentShape = new Bomb;
+		break;
 	}
 	
 }
@@ -109,7 +111,7 @@ void TetrisGame::initGame(){
 	scoreStatus.printScore();
 	scoreStatus.printSpeed();
 	scoreStatus.printParts();
-	createNewShape( 14);
+	createNewShape(rand() % 5 + 10);
 
 
 	while (true) // the game runs as long as the user doesn't press 9 or the game ends
@@ -206,29 +208,24 @@ int TetrisGame::checkKeys(char ch){
 }
 
 int TetrisGame::runGame(TetrisBoard& board, Score& scoreStatus) {
-	int maxY, minY, isBombed = 1, checkPosition, timeInterval, howManyBombed = 0, gameStatus;
+	int maxY, minY, isBombed = 1, checkPosition, timeInterval, gameStatus;
 	int whichShape = currentShape->getShape(); // update 
 	updateInterval(timeInterval, scoreStatus);
 
 	while (true)
 	{
-
-		 
-
-		 gameStatus = dropInterval(board, scoreStatus, timeInterval, isBombed, minY, maxY, howManyBombed);
+		 gameStatus = dropInterval(board, scoreStatus, timeInterval, isBombed, minY, maxY);
 		 if (gameStatus)  return gameStatus; // the game will continue unless the pause or exit button has been pressed
-
-		 checkPosition = board.checkPos(currentShape, Shape::DOWN);
 		
 		 //additional tests for the shapes, if it can move/detonate (the bomb).
-		 if ((checkPosition == TetrisBoard::FREE_SPACE 
-			 || (currentShape->getShape() == Shape::BOMB && !(currentShape->checkBomb(Shape::DOWN, board, howManyBombed)) && currentShape->shape[0].getY() > 18)
-			 || (currentShape->getShape() == Shape::JOKER && checkPosition == TetrisBoard::SHAPE_ENCOUNTER)) && isBombed)
-			 currentShape->move(Shape::DOWN, board);
+		 if (isBombed != 0) {
+			 gameStatus = currentShape->move(Shape::DOWN, board);
 
+		 }
 		 //start a new round (creates new shapes and updates the board with the old one)
-		 else 
-			 newRound(isBombed,timeInterval, board, minY, maxY, scoreStatus, howManyBombed, whichShape);
+		 if(gameStatus == TetrisBoard::BOMB_EXPLODED || gameStatus==TetrisBoard::MOVE_FAIL)
+			 newRound(isBombed, timeInterval, board, minY, maxY, scoreStatus, whichShape);
+		 
 		 
 
 		 if (board.checkEndGame()) {
@@ -240,7 +237,7 @@ int TetrisGame::runGame(TetrisBoard& board, Score& scoreStatus) {
 	}
 }
 
-void TetrisGame::newRound(int& isBombed, int& timeInterval, TetrisBoard& board, int& minY, int& maxY, Score& scoreStatus, int& howManyBombed,int& whichShape) {
+void TetrisGame::newRound(int& isBombed, int& timeInterval, TetrisBoard& board, int& minY, int& maxY, Score& scoreStatus,int& whichShape) {
 	isBombed = 1;
 	updateInterval(timeInterval, scoreStatus);
 
@@ -250,8 +247,8 @@ void TetrisGame::newRound(int& isBombed, int& timeInterval, TetrisBoard& board, 
 	currentShape->getMinMaxShape(minY, maxY);
 	scoreStatus.setLinesDeleted(board.deleteLines(currentShape, minY, maxY),currentShape); // deletes lines only within the shape's limit
 	scoreStatus.updateScoreValue(scoreStatus.getLinesDeleted()); 
-	scoreStatus.updateScoreValue(-50 * howManyBombed); // each block the bomb erased costs 50 points
-	howManyBombed = 0;
+	scoreStatus.updateScoreValue(-50 * board.getHowManyDeleted()); // each block the bomb erased costs 50 points
+	board.sethowManyDeleted(0);
 	scoreStatus.printParts();
 	scoreStatus.printScore();
 	whichShape = randomNum(); 
@@ -260,7 +257,7 @@ void TetrisGame::newRound(int& isBombed, int& timeInterval, TetrisBoard& board, 
 	currentShape->move(Shape::DOWN, board);
 }
 
-int TetrisGame:: dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeInterval, int& isBombed, int&minY, int& maxY, int& howManyBombed)
+int TetrisGame:: dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeInterval, int& isBombed, int&minY, int& maxY)
 {
 	char keyEntered;
 	int validKey, speed;
@@ -311,8 +308,10 @@ int TetrisGame:: dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeI
 				}
 
 				//check if the bomb needs to explode on the direction entered
-				else if (currentShape->getShape() == Shape::BOMB && (keyEntered == LEFT_KEY || keyEntered == RIGHT_KEY) && currentShape->shape[0].getX() > 1 && currentShape->shape[0].getX() < 10) { // the bomb has exploded						currentShape.checkBomb(validKey, board, howManyBombed);
-					if (currentShape->checkBomb(validKey, board, howManyBombed)) {
+ 
+				else if (currentShape->getShape() == Shape::BOMB && (keyEntered == LEFT_KEY || keyEntered == RIGHT_KEY) && currentShape->shape[0].getX() > 1 && currentShape->shape[0].getX() < 10) { // the bomb has exploded						
+					//currentShape.checkBomb(validKey, board,	Bombed);
+					if(currentShape->move(validKey, board)==TetrisBoard::BOMB_EXPLODED){
 						isBombed = 0; // the bomb has been detonated
 						break;
 					}

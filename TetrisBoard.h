@@ -6,11 +6,13 @@
 
 class TetrisBoard{
 private:
-	int Board[ROWS][COLUMNS];
+	int Board[ROWS][COLUMNS], howManyDeleted;
 public:
-	enum { BOTTOM_ENCOUNTER = 11, SHAPE_ENCOUNTER = 12, FREE_SPACE };
+	enum { BOTTOM_ENCOUNTER = 11, SHAPE_ENCOUNTER = 12, FREE_SPACE, BOMB_EXPLODED, MOVED_SUCCESSFULLY, MOVE_FAIL };
 	
-	TetrisBoard(){ setBoard(); }
+
+
+	TetrisBoard() { setBoard(); howManyDeleted = 0; }
 
 	void printBoard(int currentY, const Shape* current);
 
@@ -44,6 +46,10 @@ public:
 	bool checkLine(int currentY);
 
 	int deleteLines(const Shape* current, int minY, int maxY);
+
+	void sethowManyDeleted(int num) { howManyDeleted += num; }
+
+	int getHowManyDeleted() { return howManyDeleted; }
 
 };
 

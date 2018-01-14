@@ -5,6 +5,7 @@ Score::Score() {
 	linesDeleted = 0;
 	partsNum = 0;
 	speedCounter = 0;
+	howManyBombed = 0;
 	for (int i = 0; i < COLUMNS; i++)
 		maxValueY[i] = ROWS + Board_Gap;
 	

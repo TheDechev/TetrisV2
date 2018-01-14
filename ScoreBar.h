@@ -3,7 +3,7 @@
 #include "TetrisBoard.h"
 
 class Score{
-	int scoreValue, distance, linesDeleted, partsNum, speedCounter;
+	int scoreValue, distance, linesDeleted, partsNum, speedCounter, howManyBombed;
 	int maxValueY[COLUMNS];
 public:
 	enum { VERY_SLOW = -2, SLOW, NORMAL, HIGH, VERY_HIGH };		// Speed const
@@ -13,6 +13,9 @@ public:
 	int getSpeed(){
 		return speedCounter;
 	}
+
+	int getHowManyBombed() { return howManyBombed; }
+	void updateHowManyBombed(int num) { howManyBombed += num; };
 
 	void increaseSpeed(){
 		if (speedCounter == VERY_HIGH)

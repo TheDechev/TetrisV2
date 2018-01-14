@@ -5,31 +5,7 @@
 #include "Line.h"
 
 
-//void Shape::createShape(int whichShape) {
-//	int k=1;
-//	switch (whichShape) {
-//	
-//
-//
-//	//case JOKER:
-//	//	shape = new Point;
-//	//	shape->setX(6);
-//	//	shape->setY(2);
-//	//	setTexture('X');
-//	//	SIZE = 1;
-//	//	break;
-//	//case BOMB:
-//	//	shape = new Point;
-//	//	shape->setX(6);
-//	//	shape->setY(2);
-//	//	setTexture('@');
-//	//	SIZE = 1;
-//	//	break;
-//	}
-//	setTextColor(whichColor(whichShape));
-//	setShape(whichShape);
-//	setDegree(DEG_0);
-//}
+
 
 bool Shape::canTheShapeRotate(const TetrisBoard& board) {
 	int x, y;
@@ -50,10 +26,14 @@ bool Shape::canTheShapeRotate(const TetrisBoard& board) {
 
 
 
-void Shape::move(int direction,const TetrisBoard& board) {
+int Shape::move(int direction, TetrisBoard& board) {
 	
 	int degree = getDegree();
 	int check = 1;
+
+
+	if (!(board.checkPos(this, direction) == TetrisBoard::FREE_SPACE))
+		return TetrisBoard::MOVE_FAIL;
 
 	for (int j = 0; j < SIZE; j++)
 		shape[j].draw(' ');
@@ -67,61 +47,12 @@ void Shape::move(int direction,const TetrisBoard& board) {
 	for (int j = 0; j < SIZE; j++)
 		shape[j].draw(getTexture());
 
-	
-}
-
-bool Shape::checkBomb(int direction, TetrisBoard& board, int& howManyBombed){
-	int x= shape[0].getX(), y=shape[0].getY();
-
-	shape[0].draw(getTexture());
-
-	// checks if the bomb can explode in the direction entered
-	if ((direction == LEFT && board.checkBoard(x - 1, y) == true) ||
-		(direction == RIGHT && board.checkBoard(x + 1, y) == true) ||
-		(board.checkBoard(x, y + 1) == true) || y>=Board_Gap+ROWS-1)
-	{
-		howManyBombed = activateBomb(x, y, board); // update the pieces that have been blown
-		return true;
-	}
-
-
-	gotoxy(x, y);
-	return false;
-
+	return TetrisBoard::MOVED_SUCCESSFULLY;
 
 }
 
-int Shape::activateBomb(int x, int y, TetrisBoard& board){
-	int tempX, tempY = y - 1 , howManyBombed = 0;
-	for (int i = 0; i < 3; i++){
 
-		tempX = x - 1;
-		for (int j = 0; j < 3; j++){
-			// if it's within the board limits and a shape has been met, update the counter (howManyBombed)
-			if (tempX > 0 && tempX <= COLUMNS && tempY > Board_Gap && tempY < ROWS+Board_Gap){
-				if (board.getCoord(tempX, tempY))
-					howManyBombed++;
 
-				// explosion effect
-				if (j%2==0)
-					setTextColor(YELLOW);
-				else
-					setTextColor(RED);
-				gotoxy(tempX, tempY);
-				cout << "*";
-				Sleep(50);
-				
-				gotoxy(tempX, tempY);
-				cout << " ";
-				board.setCoord(tempX, tempY,0);
-			}
-			tempX++;
-		}
-		tempY++;
-
-	}
-	return howManyBombed;
-}
 
 void Shape::getMinMaxShape(int& minY, int& maxY) {
 	minY = maxY = shape[0].getY();

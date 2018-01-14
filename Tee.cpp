@@ -19,9 +19,13 @@ Tee::Tee()
 	setShape(TEE);
 }
 
-void Tee::move(int direction, const TetrisBoard& board) {
+int Tee::move(int direction,  TetrisBoard& board) {
 	int degree = getDegree();
 	int x, y, check = 1;
+
+	if (!(board.checkPos(this, direction) == TetrisBoard::FREE_SPACE))
+		return TetrisBoard::MOVE_FAIL;
+
 
 	for (int j = 0; j < SIZE; j++)
 		shape[j].draw(' ');
@@ -85,6 +89,8 @@ void Tee::move(int direction, const TetrisBoard& board) {
 	setTextColor(whichColor());
 	for (int j = 0; j < SIZE; j++)
 		shape[j].draw(getTexture());
+	return TetrisBoard::MOVED_SUCCESSFULLY;
+
 }
 
 void Tee::rotate(int Degree) {
