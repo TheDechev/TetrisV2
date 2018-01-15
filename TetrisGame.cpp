@@ -10,7 +10,6 @@
 #include "Config.h"
 #include "TetrisBoard.h"
 #include <thread>
-#include <typeinfo>
 #include <chrono>
 
 
@@ -32,13 +31,17 @@ int TetrisGame:: MenuControl(char keyPressed, TetrisBoard& board, Score& scoreSt
 		break;
 	case '8':
 		ShellExecute(0, 0, L"https://i.imgur.com/0u47UC2.jpg", 0, 0, SW_SHOW);
-		break;
+		return CONTINUE_GAME;
 	case '9':
 		printGameOver();
 		return END_GAME;
 	}
-	flushall();
+	_flushall();
+	return CONTINUE_GAME;
+
 }
+
+
 
 void TetrisGame::continueBlink() {
 	setTextColor(DARKGREY);
@@ -54,6 +57,15 @@ void TetrisGame::continueBlink() {
 	gotoxy(28, 8);
 	cout << "CONTINUE";
 	Sleep(200);
+}
+
+void TetrisGame::hardDrop(Score & scoreStatus, int & timeInterval, unsigned long int & currentTime, int & minY, int & maxY)
+{
+	currentShape->getMinMaxShape(minY, maxY);
+	scoreStatus.setDistance(currentShape, minY);
+	scoreStatus.updateScoreValue(2 * scoreStatus.getDistance()); // hard drop 
+	currentTime -= 800;
+	timeInterval = 0;
 }
 
 void TetrisGame::createNewShape(int whichShape)
@@ -181,6 +193,41 @@ void TetrisGame::printMenu(){
 	cout << "(9) EXIT";
 }
 
+void TetrisGame::printGameOver()
+{
+	setTextColor(LIGHTCYAN);
+	gotoxy(0, 20);
+	cout << "     _____                         ____                 " << endl;
+	cout << "    / ____|                       / __ \\                " << endl;
+	cout << "   | |  __  __ _ _ __ ___   ___  | |  | |_   _____ _ __ " << endl;
+	cout << "   | | |_ |/ _` | '_ ` _ \\ / _ \\ | |  | \\ \\ / / _ \\ '__|" << endl;
+	cout << "   | |__| | (_| | | | | | |  __/ | |__| |\\ V /  __/ |   " << endl;
+	cout << "    \\_____|\\__,_|_| |_| |_|\\___|  \\____/  \\_/ \\___|_|   " << endl;
+	Sleep(3000);
+}
+
+bool TetrisGame::checkExit(char keyEntered)
+{
+	if (keyEntered == '9') {
+		printGameOver();
+		return true;
+	}
+	return false;
+}
+
+bool TetrisGame::checkPause(char keyEntered)
+{
+	if (keyEntered == '8') { // 'help'
+		ShellExecute(0, 0, L"https://i.imgur.com/0u47UC2.jpg", 0, 0, SW_SHOW);
+		return true;
+	}
+	else if (keyEntered == '2') { //'pause'
+		Sleep(1000);
+		return true;
+	}
+	return false;
+}
+
 void TetrisGame::displayBorder(){
 	
 	gotoxy(0, 3);
@@ -207,27 +254,52 @@ int TetrisGame::checkKeys(char ch){
 	return invalid_Key;
 }
 
+void TetrisGame::setKeys()
+{
+	keyboards[0] = DOWN_KEY; 
+	keyboards[1] = LEFT_KEY; 
+	keyboards[2] = UP_KEY; 
+	keyboards[3] = RIGHT_KEY; 
+	keyboards[4] = SPACE_key;
+	keyboards[5] = s_key;
+	keyboards[6] = S_key;
+	keyboards[7] = ONE;
+	keyboards[8] = TWO;
+	keyboards[9] = THREE;
+	keyboards[10] = FOUR;
+}
+
+int TetrisGame::randomNum()
+{
+	int res = rand() % 100;
+	if (res < 70)
+		res = rand() % 5 + 10;
+	else
+		res = rand() % 2 + 15;
+	return  res;
+}
+
 int TetrisGame::runGame(TetrisBoard& board, Score& scoreStatus) {
-	int maxY, minY, isBombed = 1, checkPosition, timeInterval, gameStatus;
+	int maxY, minY, timeInterval, gameStatus;
 	int whichShape = currentShape->getShape(); // update 
 	updateInterval(timeInterval, scoreStatus);
 
 	while (true)
 	{
-		 gameStatus = dropInterval(board, scoreStatus, timeInterval, isBombed, minY, maxY);
-		 if (gameStatus)  return gameStatus; // the game will continue unless the pause or exit button has been pressed
+		 gameStatus = dropInterval(board, scoreStatus, timeInterval, minY, maxY);
+		 if (gameStatus==END_GAME || gameStatus==PAUSED)  return gameStatus; // the game will continue unless the pause or exit button has been pressed
 		
 		 //additional tests for the shapes, if it can move/detonate (the bomb).
-		 if (isBombed != 0) {
+		 if (gameStatus != TetrisBoard::BOMB_EXPLODED && gameStatus != TetrisBoard::STOP_JOKER) {
 			 gameStatus = currentShape->move(Shape::DOWN, board);
-
 		 }
-		 //start a new round (creates new shapes and updates the board with the old one)
-		 if(gameStatus == TetrisBoard::BOMB_EXPLODED || gameStatus==TetrisBoard::MOVE_FAIL)
-			 newRound(isBombed, timeInterval, board, minY, maxY, scoreStatus, whichShape);
-		 
-		 
 
+		 //start a new round (creates new shapes and updates the board with the old one)
+		 if(gameStatus == TetrisBoard::BOMB_EXPLODED || gameStatus==TetrisBoard::MOVE_FAIL || gameStatus == TetrisBoard::STOP_JOKER)
+			 newRound(timeInterval, board, minY, maxY, scoreStatus, whichShape);
+
+		 
+	
 		 if (board.checkEndGame()) {
 				printGameOver();
 				return END_GAME;
@@ -237,8 +309,7 @@ int TetrisGame::runGame(TetrisBoard& board, Score& scoreStatus) {
 	}
 }
 
-void TetrisGame::newRound(int& isBombed, int& timeInterval, TetrisBoard& board, int& minY, int& maxY, Score& scoreStatus,int& whichShape) {
-	isBombed = 1;
+void TetrisGame::newRound(int& timeInterval, TetrisBoard& board, int& minY, int& maxY, Score& scoreStatus,int& whichShape) {
 	updateInterval(timeInterval, scoreStatus);
 
 	if (currentShape->getShape() != Shape::BOMB)
@@ -257,7 +328,18 @@ void TetrisGame::newRound(int& isBombed, int& timeInterval, TetrisBoard& board, 
 	currentShape->move(Shape::DOWN, board);
 }
 
-int TetrisGame:: dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeInterval, int& isBombed, int&minY, int& maxY)
+void TetrisGame::changeSpeed(char indicator, int & timeInterval, Score & scoreStatus)
+{
+	if (indicator == THREE) // increase speed
+		scoreStatus.increaseSpeed();
+	else // decrease speed
+		scoreStatus.decreaseSpeed();
+	updateInterval(timeInterval, scoreStatus);
+
+	scoreStatus.printSpeed();
+}
+
+int TetrisGame:: dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeInterval, int&minY, int& maxY)
 {
 	char keyEntered;
 	int validKey, speed;
@@ -267,6 +349,8 @@ int TetrisGame:: dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeI
 	while (GetTickCount64() <= currentTime) {
 		if (_kbhit()) { // otherwise, check for an input
 			keyEntered = _getch();
+			_flushall();
+
 			validKey = checkKeys(keyEntered); // checks if the pressed key is valid
 
 			if (checkExit(keyEntered)) return END_GAME;
@@ -293,8 +377,7 @@ int TetrisGame:: dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeI
 					else if (currentShape->getShape() == Shape::JOKER && (keyEntered == s_key || keyEntered == S_key))
 					{
 						board.updateBoard(currentShape);
-						isBombed = 0;
-						break;
+						return TetrisBoard::STOP_JOKER;
 					}
 
 					//Down key has been pressed - soft drop
@@ -304,16 +387,13 @@ int TetrisGame:: dropInterval(TetrisBoard& board, Score& scoreStatus, int& timeI
 						setTextColor(currentShape->whichColor());
 					}
 					currentShape->move(validKey, board);
-
 				}
 
 				//check if the bomb needs to explode on the direction entered
  
-				else if (currentShape->getShape() == Shape::BOMB && (keyEntered == LEFT_KEY || keyEntered == RIGHT_KEY) && currentShape->shape[0].getX() > 1 && currentShape->shape[0].getX() < 10) { // the bomb has exploded						
-					//currentShape.checkBomb(validKey, board,	Bombed);
+				else if (currentShape->getShape() == Shape::BOMB && (keyEntered == LEFT_KEY || keyEntered == RIGHT_KEY) && currentShape->shape[0].getX() > Point::START_Y-1 && currentShape->shape[0].getX() < COLUMN) { 					
 					if(currentShape->move(validKey, board)==TetrisBoard::BOMB_EXPLODED){
-						isBombed = 0; // the bomb has been detonated
-						break;
+						return TetrisBoard::BOMB_EXPLODED;
 					}
 				}
 

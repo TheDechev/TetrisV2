@@ -11,6 +11,20 @@ Score::Score() {
 	
 }
 
+void Score::increaseSpeed()
+{
+	if (speedCounter == VERY_HIGH)
+		return;
+	speedCounter++;
+}
+
+void Score::decreaseSpeed()
+{
+	if (speedCounter == VERY_SLOW)
+		return;
+	speedCounter--;
+}
+
 void Score::printSpeed() {
 	setTextColor(WHITE);
 	gotoxy(18, 0);
@@ -60,6 +74,17 @@ void Score::setLinesDeleted(int howMany, const Shape* currentShape) {
 	}
 }
 
+void Score::printParts()
+{
+	setTextColor(WHITE);
+	gotoxy(7, 0);
+	for (int i = 0; i < 4; i++)
+		cout << " ";
+	gotoxy(7, 0);
+	cout << partsNum++;
+
+}
+
 void Score::setDistance(Shape* currentShape, int minYshape) {
 	
 		int currentMax = ROWS + Board_Gap, currentX;
@@ -70,5 +95,24 @@ void Score::setDistance(Shape* currentShape, int minYshape) {
 		}
 		distance = currentMax - minYshape;
 	
+}
+
+bool Score::isLarger(int currentX, int maxY)
+{
+	if (maxY < maxValueY[currentX - 1]) {
+		setMax(currentX, maxY);
+		return true;
+	}
+	return false;
+}
+
+void Score::printScore()
+{
+	setTextColor(LIGHTGREEN);
+	gotoxy(35, 0);
+	for (int i = 0; i < COLUMNS; i++)
+		cout << BLANK_SPACE;
+	gotoxy(35, 0);
+	cout << getScoreValue();
 }
 

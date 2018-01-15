@@ -4,10 +4,12 @@
 Joker::Joker()
 {
 	SIZE = 1;
-	shape[0].setY(START_Y);
-	shape[0].setX(START_X);
+	shape[0].setY(Point::START_Y);
+	shape[0].setX(Point::START_X);
 	setTextColor(whichColor(JOKER));
 	setShape(JOKER);
+	setTexture('X');
+	
 }
 
 int Joker::move(int direction, TetrisBoard & board)

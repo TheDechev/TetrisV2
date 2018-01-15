@@ -10,38 +10,20 @@ public:
 
 	Score();
 
-	int getSpeed(){
-		return speedCounter;
-	}
+	int getSpeed(){ return speedCounter; }
 
 	int getHowManyBombed() { return howManyBombed; }
 	void updateHowManyBombed(int num) { howManyBombed += num; };
 
-	void increaseSpeed(){
-		if (speedCounter == VERY_HIGH)
-			return;
-		speedCounter++; 
-	}
+	void increaseSpeed();
 
-	void decreaseSpeed(){
-		if (speedCounter == VERY_SLOW)
-			return;
-		speedCounter--;
-	}
+	void decreaseSpeed();
 
 	void printSpeed();
 
 	void setLinesDeleted(int howMany, const Shape* currentShape);
 
-	void printParts(){
-		setTextColor(WHITE);
-		gotoxy(7, 0);
-		for (int i = 0; i < 4; i++)
-			cout << " ";
-		gotoxy(7, 0);
-		cout << partsNum++;
-
-	}
+	void printParts();
 
 	int getLinesDeleted() { return linesDeleted; }
 
@@ -58,25 +40,10 @@ public:
 	int getScoreValue() { return scoreValue; }
 
 	// The function checks and updates the max array
-	bool isLarger(int currentX, int maxY) 
-	{
-		if (maxY < maxValueY[currentX - 1]){
-			setMax(currentX, maxY);
-			return true;
-		}
-		return false;
-	}
+	bool isLarger(int currentX, int maxY);
 
-	void printScore(){
-		setTextColor(LIGHTGREEN);
-		gotoxy(35, 0);
-		for (int i = 0; i < 10; i++)
-			cout << " ";
-		gotoxy(35, 0);
-		cout << getScoreValue();
-	}
+	void printScore();
 
-	
 };
 
 #endif _Score_H

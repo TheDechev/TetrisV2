@@ -6,13 +6,13 @@ using namespace std;
 
 class Point{
 	enum {DOWN,LEFT,UP,RIGHT};
-private:
 	int x;
 	int y;
 public:
+	enum { START_X = 6, START_Y = 2 };
 	Point(){ // sets values to the middle of the screen
-		this->x = 7;
-		this->y = 0;
+		this->x = START_X;
+		this->y = START_Y;
 	}
 	Point(int x, int y){
 		this->x = x;

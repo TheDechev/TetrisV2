@@ -40,6 +40,14 @@ int TetrisBoard::checkPos(const Shape* current, int direction){
 	return FREE_SPACE;
 }
 
+bool TetrisBoard::checkBoard(int _x, int _y) const
+{
+	if (getCoord(_x, _y))
+		return TRUE;
+	else
+		return FALSE;
+}
+
 bool TetrisBoard::checkLine(int currentY){
 
 	for (int x = 1; x <= COLUMNS; x++){
@@ -95,8 +103,16 @@ void TetrisBoard::setBoard() {
 	}
 }
 
+int TetrisBoard::getCoord(int _x, int _y) const
+{
+	if (_y < Board_Gap || _x > ROWS + Board_Gap)
+		return 0;
+	else
+		return Board[_y - Board_Gap][_x - 1];
+}
+
 bool TetrisBoard::checkEndGame() {
-	for (int i = 0; i < 15; i++) {
+	for (int i = 0; i < ROWS; i++) {
 		if (Board[0][i] != 0)
 			return TRUE;
 	}

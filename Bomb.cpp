@@ -1,33 +1,25 @@
 #include "Bomb.h"
 #include "TetrisBoard.h"
 #include "ScoreBar.h"
+
 Bomb::Bomb()
 {
 	SIZE = 1;
-	shape[0].setY(START_Y);
-	shape[0].setX(START_X);
+	shape[0].setY(Point::START_Y);
+	shape[0].setX(Point::START_X);
 	setTextColor(whichColor(BOMB));
 	setShape(BOMB);
+	setTexture('@');
+
 }
 
-
-
-int Bomb::move(int direction, TetrisBoard& board) {
-
-	int degree = getDegree();
-	int check = 1;
-
+int Bomb::move(int direction, TetrisBoard& board)  {
 
 	if (checkBomb(direction, board)) // the bomb needs to explode
 		return TetrisBoard::BOMB_EXPLODED;
-		
-
-	//WHY???	
-	//currentShape->shape[0].getY() > 18)
 	
-
 	for (int j = 0; j < SIZE; j++)
-		shape[j].draw(' ');
+		shape[j].draw(BLANK_SPACE);
 
 	if (direction != UP) { // the shape won't rotate
 		for (int j = 0; j < SIZE; j++)
@@ -38,13 +30,11 @@ int Bomb::move(int direction, TetrisBoard& board) {
 	for (int j = 0; j < SIZE; j++)
 		shape[j].draw(getTexture());
 
-
+	return TetrisBoard::MOVED_SUCCESSFULLY;
 }
-
 
 bool Bomb::checkBomb(int direction, TetrisBoard& board) {
 	int x = shape[0].getX(), y = shape[0].getY();
-
 	shape[0].draw(getTexture());
 
 	// checks if the bomb can explode in the direction entered
@@ -55,20 +45,16 @@ bool Bomb::checkBomb(int direction, TetrisBoard& board) {
 		board.sethowManyDeleted(activateBomb(x, y, board)); // update the pieces that have been blown
 		return true;
 	}
-
-
 	gotoxy(x, y);
 	return false;
-
-
 }
 
 int Bomb::activateBomb(int x, int y, TetrisBoard& board) {
 	int tempX, tempY = y - 1, howManyBombed = 0;
-	for (int i = 0; i < 3; i++) {
-
+	for (int i = 0; i < EXPLOSION_AREA; i++)
+	{
 		tempX = x - 1;
-		for (int j = 0; j < 3; j++) {
+		for (int j = 0; j < EXPLOSION_AREA; j++) {
 			// if it's within the board limits and a shape has been met, update the counter (howManyBombed)
 			if (tempX > 0 && tempX <= COLUMNS && tempY > Board_Gap && tempY < ROWS + Board_Gap) {
 				if (board.getCoord(tempX, tempY))
@@ -84,13 +70,12 @@ int Bomb::activateBomb(int x, int y, TetrisBoard& board) {
 				Sleep(50);
 
 				gotoxy(tempX, tempY);
-				cout << " ";
+				cout << BLANK_SPACE;
 				board.setCoord(tempX, tempY, 0);
 			}
 			tempX++;
 		}
 		tempY++;
-
 	}
 	return howManyBombed;
 }

@@ -12,7 +12,7 @@
 #include <conio.h>
 #include "Color.h"
 
-
+#define BLANK_SPACE ' '
 enum { ROWS = 15, COLUMNS = 10, Board_Gap = 3 };
 
 using namespace std;

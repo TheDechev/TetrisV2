@@ -6,87 +6,15 @@ Gun::Gun() {
 	SIZE = 4;
 	shape[0].setX(k);
 	shape[1].setX(k);
-	shape[0].setY(2);
-	shape[1].setY(3);
+	shape[0].setY(Point::START_Y);
+	shape[1].setY(Point::START_Y + 1);
 	for (int i = 2; i < SIZE; i++) {
 		k++;
 		shape[i].setX(k);
-		shape[i].setY(3);
+		shape[i].setY(Point::START_Y + 1);
 	}
 	setTextColor(whichColor(GUN));
 	setShape(GUN);
-}
-
-int Gun::move(int direction,  TetrisBoard& board) {
-	int degree = getDegree();
-	int x, y, check = 1;
-
-	if (!(board.checkPos(this, direction) == TetrisBoard::FREE_SPACE))
-		return TetrisBoard::MOVE_FAIL;
-
-	for (int j = 0; j < SIZE; j++)
-		shape[j].draw(' ');
-
-	if (direction != UP) { // the shape won't rotate
-		for (int j = 0; j < SIZE; j++)
-			shape[j].move(direction);
-	}
-	else {
-
-		check = canTheShapeRotate(board);
-
-		if (check) {
-			if (degree == DEG_0 || degree == DEG_180) //faces down
-			{
-				for (int j = 0; j < SIZE; j++) {
-					if (shape[j].getY() == 16 || board.checkBoard(shape[j].getX(), shape[j].getY() + 1)
-						|| board.checkBoard(shape[j].getX(), shape[j].getY() + 2))
-					{
-						for (int i = 0; i < SIZE; i++) {
-							y = shape[i].getY();
-							shape[i].setY(y - 2);
-						}
-						break;
-					}
-				}
-			}
-			else // checking right/left 
-			{
-				for (int j = 0; j < SIZE; j++) {
-					if (shape[j].getX() <= 2 || board.checkBoard(shape[j].getX() - 1, shape[j].getY())
-						|| board.checkBoard(shape[j].getX() - 2, shape[j].getY()))
-					{
-						for (int i = 0; i < SIZE; i++) {
-							x = shape[i].getX();
-							shape[i].setX(x + 1);
-						}
-						break;
-					}
-					if (shape[j].getX() >= 9 || board.checkBoard(shape[j].getX() + 1, shape[j].getY())
-						|| board.checkBoard(shape[j].getX() + 2, shape[j].getY()))
-					{
-						for (int i = 0; i < SIZE; i++) {
-							x = shape[i].getX();
-							if (degree == DEG_90)
-								shape[i].setX(x - 1);
-							else
-								shape[i].setX(x - 2);
-						}
-						break;
-					}
-				}
-			}
-		}
-
-		if (check)
-			rotate(degree);
-
-	}
-
-	setTextColor(whichColor());
-	for (int j = 0; j < SIZE; j++)
-		shape[j].draw(getTexture());
-	return TetrisBoard::MOVED_SUCCESSFULLY;
 }
 
 void Gun::rotate(int Degree) {
