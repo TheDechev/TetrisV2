@@ -10,7 +10,6 @@ Bomb::Bomb()
 	setTextColor(whichColor(BOMB));
 	setShape(BOMB);
 	setTexture('@');
-
 }
 
 int Bomb::move(int direction, TetrisBoard& board)  {

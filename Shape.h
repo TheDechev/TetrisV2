@@ -12,10 +12,10 @@ private:
 	int Degree;		// Current
 	char texture;		// Shape texture to print 
 public:
-	enum{DEFAULT_OBJ_COLOR=999, DEFAULT_SIZE = 4};
-	enum {DEG_0,DEG_90,DEG_180,DEG_270};
-	enum { CUBE = 10, LINE ,ZIGZAG, GUN, TEE, JOKER, BOMB};
-	enum{ DOWN, LEFT, UP, RIGHT };
+	enum { DEFAULT_OBJ_COLOR=999, DEFAULT_SIZE = 4};			
+	enum { DEG_0,DEG_90,DEG_180,DEG_270};						// Shape's degree status consts
+	enum { CUBE = 10, LINE ,ZIGZAG, GUN, TEE, JOKER, BOMB};		// Shape's names consts
+	enum { DOWN, LEFT, UP, RIGHT };								
 	Point shape[DEFAULT_SIZE];
 	int SIZE;
 
@@ -28,6 +28,8 @@ public:
 
 	virtual void rotate(int Degree) {}
 
+	// The function is getting (by ref) the minimun and the maximum Y values
+	// of the current shape
 	void getMinMaxShape(int& minY, int& maxY);
 
 	Color whichColor(int theShapeNum= DEFAULT_OBJ_COLOR) const;
@@ -36,15 +38,15 @@ public:
 
 	void setDegree(int pos) { Degree = pos; }
 
-	int getDegree() { return Degree; }
+	int getDegree() const { return Degree; }
 
-	int getShape()const { return shapeType; }
+	int getShape() const { return shapeType; }
 
 	void setShape(int whichShape) { shapeType = whichShape; }
 
 	void setTexture(char ch) { this->texture = ch; }
 
-	char getTexture() { return texture; }
+	char getTexture() const { return texture; }
 };
 
 #endif _Shape_H

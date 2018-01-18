@@ -10,7 +10,7 @@ class Point{
 	int y;
 public:
 	enum { START_X = 6, START_Y = 2 };
-	Point(){ // sets values to the middle of the screen
+	Point(){ // sets values to the top middle of the board
 		this->x = START_X;
 		this->y = START_Y;
 	}

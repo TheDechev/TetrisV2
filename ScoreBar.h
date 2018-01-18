@@ -10,10 +10,11 @@ public:
 
 	Score();
 
-	int getSpeed(){ return speedCounter; }
+	int getSpeed() const { return speedCounter; }
 
-	int getHowManyBombed() { return howManyBombed; }
-	void updateHowManyBombed(int num) { howManyBombed += num; };
+	int getHowManyBombed() const { return howManyBombed; }
+
+	void updateHowManyBombed(int num) { howManyBombed += num; }
 
 	void increaseSpeed();
 
@@ -25,19 +26,19 @@ public:
 
 	void printParts();
 
-	int getLinesDeleted() { return linesDeleted; }
+	int getLinesDeleted() const { return linesDeleted; }
 
 	void setMax(int x, int max){ maxValueY[x - 1] = max; }
 	
-	int getMax(int x) { return maxValueY[x - 1]; }
+	int getMax(int x) const { return maxValueY[x - 1]; }
 
 	void setDistance(Shape* currentShape, int minYshape);
 
-	int getDistance(){ return distance; }
+	int getDistance() const { return distance; }
 
 	void updateScoreValue(int addition) { scoreValue += addition; };
 	
-	int getScoreValue() { return scoreValue; }
+	int getScoreValue() const { return scoreValue; }
 
 	// The function checks and updates the max array
 	bool isLarger(int currentX, int maxY);

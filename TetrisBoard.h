@@ -20,7 +20,13 @@ public:
 
 	void setCoord(int _x, int _y, int val) { Board[_y - Board_Gap][_x - 1] = val; }
 	
-	int getCoord(int _x, int _y) const;
+	int getCoord(int _x, int _y) const
+	{
+		if (_y < Board_Gap || _x > ROWS + Board_Gap)
+			return 0;
+		else
+			return Board[_y - Board_Gap][_x - 1];
+	}
 
 	bool checkEndGame();
 
@@ -34,7 +40,7 @@ public:
 
 	void sethowManyDeleted(int num) { howManyDeleted += num; }
 
-	int getHowManyDeleted() { return howManyDeleted; }
+	int getHowManyDeleted() const { return howManyDeleted; }
 
 };
 

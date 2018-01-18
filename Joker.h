@@ -5,6 +5,7 @@
 class TetrisBoard;
 
 class Joker : public Shape {
+
 public:
 	Joker();
 	int move(int direction, TetrisBoard& board) override;

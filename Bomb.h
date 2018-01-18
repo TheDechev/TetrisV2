@@ -4,7 +4,7 @@
 
 class TetrisBoard;
 
-enum{ EXPLOSION_AREA = 3 };
+enum { EXPLOSION_AREA = 3 };
 
 class Bomb : public Shape  {
 public:
