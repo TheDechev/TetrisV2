@@ -41,8 +41,6 @@ int TetrisGame:: MenuControl(char keyPressed, TetrisBoard& board, Score& scoreSt
 
 }
 
-
-
 void TetrisGame::continueBlink() {
 	setTextColor(DARKGREY);
 	gotoxy(16, 8);
@@ -144,7 +142,6 @@ void TetrisGame::initGame(){
 	
 }
 
-
 void TetrisGame::printMenu(){
 
 	// STATUS BAR
@@ -194,7 +191,7 @@ void TetrisGame::printMenu(){
 	cout << "(9) EXIT";
 }
 
-void TetrisGame::printGameOver()
+void TetrisGame::printGameOver() const
 {
 	setTextColor(LIGHTCYAN);
 	gotoxy(0, 20);
@@ -207,7 +204,7 @@ void TetrisGame::printGameOver()
 	Sleep(3000);
 }
 
-bool TetrisGame::checkExit(char keyEntered)
+bool TetrisGame::checkExit(char keyEntered) const
 {
 	if (keyEntered == '9') {
 		printGameOver();
@@ -216,7 +213,7 @@ bool TetrisGame::checkExit(char keyEntered)
 	return false;
 }
 
-bool TetrisGame::checkPause(char keyEntered)
+bool TetrisGame::checkPause(char keyEntered) const
 {
 	if (keyEntered == '8') { // 'help'
 		ShellExecute(0, 0, L"https://i.imgur.com/0u47UC2.jpg", 0, 0, SW_SHOW);
@@ -229,7 +226,28 @@ bool TetrisGame::checkPause(char keyEntered)
 	return false;
 }
 
-void TetrisGame::displayBorder(){
+void TetrisGame::newRound(int & timeInterval, TetrisBoard & board, int & minY, int & maxY, Score & scoreStatus, int & whichShape)
+{
+	updateInterval(timeInterval, scoreStatus);
+
+	if (currentShape->getShape() != Shape::BOMB)
+		board.updateBoard(currentShape);
+
+	currentShape->getMinMaxShape(minY, maxY);
+	scoreStatus.setLinesDeleted(board.deleteLines(currentShape, minY, maxY), currentShape); // deletes lines only within the shape's limit
+	scoreStatus.updateScoreValue(scoreStatus.getLinesDeleted());
+	scoreStatus.updateScoreValue(-50 * board.getHowManyDeleted()); // each block the bomb erased costs 50 points
+	board.sethowManyDeleted(0);
+	scoreStatus.printParts();
+	scoreStatus.printScore();
+	whichShape = randomNum();
+	delete currentShape;
+	createNewShape(whichShape); // creates a new shape randomly
+	currentShape->move(Shape::DOWN, board);
+}
+
+void TetrisGame::displayBorder() const
+{
 	
 	gotoxy(0, 3);
 
@@ -270,7 +288,7 @@ void TetrisGame::setKeys()
 	keyboards[10] = FOUR;
 }
 
-int TetrisGame::randomNum()
+int TetrisGame::randomNum() const
 {
 	int res = rand() % 100;
 	if (res < 70)
@@ -278,6 +296,72 @@ int TetrisGame::randomNum()
 	else
 		res = rand() % 2 + 15;
 	return  res;
+}
+
+int TetrisGame::dropInterval(TetrisBoard & board, Score & scoreStatus, int & timeInterval, int & minY, int & maxY)
+{
+	char keyEntered;
+	int validKey, speed;
+	unsigned long int currentTime;
+	currentTime = (unsigned long int) GetTickCount64() + timeInterval; // the shape goes down every timeInerval ms
+
+	while (GetTickCount64() <= currentTime) {
+		if (_kbhit()) { // otherwise, check for an input
+			keyEntered = _getch();
+			_flushall();
+
+			validKey = checkKeys(keyEntered); // checks if the pressed key is valid
+
+			if (checkExit(keyEntered)) return END_GAME;
+			if (checkPause(keyEntered)) return PAUSED;
+
+			if (validKey != invalid_Key) {
+				speed = scoreStatus.getSpeed();
+
+				//increases or decreases the current speed if possible
+				if ((keyEntered == THREE && speed < Score::VERY_HIGH) || (keyEntered == FOUR && speed > Score::VERY_SLOW)) {
+					changeSpeed(keyEntered, timeInterval, scoreStatus);
+					break;
+				}
+
+
+				// checks if there's a free space in the direction entered OR if it's a joker it'll also return true
+				if (board.checkPos(currentShape, validKey) == TetrisBoard::FREE_SPACE)
+				{
+					// Space key has been pressed - hard drop
+					if (keyEntered == SPACE_key)
+						hardDrop(scoreStatus, timeInterval, currentTime, minY, maxY);
+
+					//Stop the Joker
+					else if (currentShape->getShape() == Shape::JOKER && (keyEntered == s_key || keyEntered == S_key))
+					{
+						board.updateBoard(currentShape);
+						return TetrisBoard::STOP_JOKER;
+					}
+
+					//Down key has been pressed - soft drop
+					else if (validKey == Shape::DOWN) {
+						scoreStatus.updateScoreValue(1); // increases score by 1
+						scoreStatus.printScore();
+						setTextColor(currentShape->whichColor());
+					}
+					currentShape->move(validKey, board);
+				}
+
+				//check if the bomb needs to explode on the direction entered
+
+				else if (currentShape->getShape() == Shape::BOMB && (keyEntered == LEFT_KEY || keyEntered == RIGHT_KEY) && currentShape->shape[0].getX() > Point::START_Y - 1 && currentShape->shape[0].getX() < COLUMN) {
+					if (currentShape->move(validKey, board) == TetrisBoard::BOMB_EXPLODED) {
+						return TetrisBoard::BOMB_EXPLODED;
+					}
+				}
+
+
+			}
+		}
+	}
+
+	return 0;
 }
 
 int TetrisGame::runGame(TetrisBoard& board, Score& scoreStatus) {
@@ -299,14 +383,10 @@ int TetrisGame::runGame(TetrisBoard& board, Score& scoreStatus) {
 		 if(gameStatus == TetrisBoard::BOMB_EXPLODED || gameStatus==TetrisBoard::MOVE_FAIL || gameStatus == TetrisBoard::STOP_JOKER)
 			 newRound(timeInterval, board, minY, maxY, scoreStatus, whichShape);
 
-		 
-	
 		 if (board.checkEndGame()) {
 				printGameOver();
 				return END_GAME;
 			}
-
-
 	}
 }
 

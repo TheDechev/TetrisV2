@@ -103,6 +103,14 @@ void TetrisBoard::setBoard() {
 	}
 }
 
+int TetrisBoard::getCoord(int _x, int _y) const
+{
+	if (_y < Board_Gap || _x > ROWS + Board_Gap)
+		return 0;
+	else
+		return Board[_y - Board_Gap][_x - 1];
+}
+
 bool TetrisBoard::checkEndGame() {
 	for (int i = 0; i < ROWS; i++) {
 		if (Board[0][i] != 0)

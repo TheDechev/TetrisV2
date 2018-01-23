@@ -21,11 +21,6 @@ int Joker::move(int direction, TetrisBoard & board)
 	if (!(board.checkPos(this, direction) == TetrisBoard::SHAPE_ENCOUNTER) &&  (!(board.checkPos(this, direction) == TetrisBoard::FREE_SPACE)))
 		return TetrisBoard::MOVE_FAIL;
 
-	//WHY???	
-	//currentShape->shape[0].getY() > 18)
-
-
-
 	for (int j = 0; j < SIZE; j++) {
 
 		// if the shape is the Joker AND there is another shape there then print the joker in top of it 

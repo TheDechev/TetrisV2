@@ -20,13 +20,7 @@ public:
 
 	void setCoord(int _x, int _y, int val) { Board[_y - Board_Gap][_x - 1] = val; }
 	
-	int getCoord(int _x, int _y) const
-	{
-		if (_y < Board_Gap || _x > ROWS + Board_Gap)
-			return 0;
-		else
-			return Board[_y - Board_Gap][_x - 1];
-	}
+	int getCoord(int _x, int _y) const;
 
 	bool checkEndGame();
 
@@ -38,7 +32,7 @@ public:
 
 	int deleteLines(const Shape* current, int minY, int maxY);
 
-	void sethowManyDeleted(int num) { howManyDeleted += num; }
+	void sethowManyDeleted(int num) { howManyDeleted = num; }
 
 	int getHowManyDeleted() const { return howManyDeleted; }
 
