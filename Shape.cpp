@@ -32,7 +32,7 @@ bool Shape::canTheShapeRotate(const TetrisBoard& board) {
 		y_old = shape[i].getY();
 		x_new = center - y_old;
 		y_new = centerY - centerX + x_old;
-		if (board.getCoord(x_new, y_new) || x_new >= COLUMNS || y_new >= ROWS + Board_Gap || x_new <= 1)
+		if (board.getCoord(x_new, y_new) || x_new > COLUMNS || y_new > ROWS + Board_Gap || x_new < 1 || y_new < Board_Gap-1)
 			return false;
 	}
 	return true;
