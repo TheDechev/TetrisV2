@@ -14,36 +14,27 @@ Joker::Joker()
 
 int Joker::move(int direction, TetrisBoard & board)
 {
-	int degree = getDegree();
-	int check = 1;
-
-
 	if (!(board.checkPos(this, direction) == TetrisBoard::SHAPE_ENCOUNTER) &&  (!(board.checkPos(this, direction) == TetrisBoard::FREE_SPACE)))
 		return TetrisBoard::MOVE_FAIL;
 
-	for (int j = 0; j < SIZE; j++) {
-
-		// if the shape is the Joker AND there is another shape there then print the joker in top of it 
-		if (board.getCoord(shape[0].getX(), shape[0].getY())) {
-			setTextColor(whichColor(board.getCoord(shape[j].getX(), shape[j].getY())));
-			if (board.getCoord(shape[j].getX(), shape[j].getY()) == JOKER)
-				shape[j].draw('X');
-			else 	// print the previous shape 
-				shape[j].draw('%');
-
-		}
-		else
-			shape[j].draw(' ');
+	// if the shape is the Joker AND there is another shape there then print the joker in top of it 
+	if (board.getCoord(shape[0].getX(), shape[0].getY())) {
+		setTextColor(whichColor(board.getCoord(shape[0].getX(), shape[0].getY())));
+		if (board.getCoord(shape[0].getX(), shape[0].getY()) == JOKER)
+			shape[0].draw('X');
+		else 	// print the previous shape 
+			shape[0].draw('%');
 	}
+	else
+		shape[0].draw(' ');
+	
 
 	if (direction != UP) { // the shape won't rotate
-		for (int j = 0; j < SIZE; j++)
-			shape[j].move(direction);
+		shape[0].move(direction);
 	}
 
 	setTextColor(whichColor());
-	for (int j = 0; j < SIZE; j++)
-		shape[j].draw(getTexture());
+	shape[0].draw(getTexture());
 
 	return TetrisBoard::MOVED_SUCCESSFULLY;
 }

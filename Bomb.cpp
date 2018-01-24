@@ -13,21 +13,20 @@ Bomb::Bomb()
 }
 
 int Bomb::move(int direction, TetrisBoard& board)  {
-
 	if (checkBomb(direction, board)) // the bomb needs to explode
 		return TetrisBoard::BOMB_EXPLODED;
-	
-	for (int j = 0; j < SIZE; j++)
-		shape[j].draw(BLANK_SPACE);
+
+	if (board.checkPos(this, direction) == TetrisBoard::BOTTOM_ENCOUNTER)
+		return TetrisBoard::MOVE_FAIL;
+
+	shape[0].draw(BLANK_SPACE);
 
 	if (direction != UP) { // the shape won't rotate
-		for (int j = 0; j < SIZE; j++)
-			shape[j].move(direction);
+		shape[0].move(direction);
 	}
 
 	setTextColor(whichColor());
-	for (int j = 0; j < SIZE; j++)
-		shape[j].draw(getTexture());
+	shape[0].draw(getTexture());
 
 	return TetrisBoard::MOVED_SUCCESSFULLY;
 }
