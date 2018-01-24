@@ -15,7 +15,8 @@ public:
 	enum { DEFAULT_OBJ_COLOR=999, DEFAULT_SIZE = 4};			
 	enum { DEG_0,DEG_90,DEG_180,DEG_270};						// Shape's degree status consts
 	enum { CUBE = 10, LINE ,ZIGZAG, GUN, TEE, JOKER, BOMB};		// Shape's names consts
-	enum { DOWN, LEFT, UP, RIGHT };								
+	enum { DOWN, LEFT, UP, RIGHT };		
+	enum{CANT_LEFT,CANT_RIGHT,CANT_OTHER,CAN_MOVE};
 	Point shape[DEFAULT_SIZE];
 	int SIZE;
 
@@ -34,7 +35,7 @@ public:
 
 	Color whichColor(int theShapeNum= DEFAULT_OBJ_COLOR) const;
 
-	bool canTheShapeRotate(const TetrisBoard& board);
+	int canTheShapeRotate(const TetrisBoard& board);
 
 	void setDegree(int pos) { Degree = pos; }
 
