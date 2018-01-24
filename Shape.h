@@ -16,7 +16,7 @@ public:
 	enum { DEG_0,DEG_90,DEG_180,DEG_270};						// Shape's degree status consts
 	enum { CUBE = 10, LINE ,ZIGZAG, GUN, TEE, JOKER, BOMB};		// Shape's names consts
 	enum { DOWN, LEFT, UP, RIGHT };		
-	enum{CANT_LEFT,CANT_RIGHT,CANT_OTHER,CAN_MOVE};
+	enum{ CANT_LEFT, CANT_RIGHT, CANT_OTHER, CAN_MOVE};
 	Point shape[DEFAULT_SIZE];
 	int SIZE;
 
@@ -48,6 +48,7 @@ public:
 	void setTexture(char ch) { this->texture = ch; }
 
 	char getTexture() const { return texture; }
+
 };
 
 #endif _Shape_H

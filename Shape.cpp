@@ -8,7 +8,7 @@ int Shape::canTheShapeRotate(const TetrisBoard& board) {
 
 	int centerY = shape[2].getY(), centerX = shape[2].getX();
 	int x_new, y_new, x_old, y_old, center = centerX + centerY;
-	int left_flag = 0, shape_flag = 0, right_flag = 0;
+		int left_flag = 0, shape_flag = 0, right_flag = 0;
 	for (int i = 0; i < SIZE; i++) {
 		x_old = shape[i].getX();
 		y_old = shape[i].getY();
@@ -29,7 +29,7 @@ int Shape::canTheShapeRotate(const TetrisBoard& board) {
 
 int Shape::move(int direction, TetrisBoard& board) {
 	int degree = getDegree();
-	int x, check = 1;
+	int x, check = 1, nextStep, flag = 0;
 
 	if (!(board.checkPos(this, direction) == TetrisBoard::FREE_SPACE))
 		return TetrisBoard::MOVE_FAIL;
@@ -46,22 +46,37 @@ int Shape::move(int direction, TetrisBoard& board) {
 
 		check = canTheShapeRotate(board);
 		while (check == CANT_LEFT || check == CANT_RIGHT) {
+			//a dummy check to see if the shape can be moved in that direction
 			if (check == CANT_LEFT) {
 				for (int i = 0; i < SIZE; i++) {
-					x = shape[i].getX();
-					shape[i].setX(x + 1);
+					nextStep = board.getCoord(shape[i].getX() + 1, shape[i].getY());
+					if (nextStep != 0) 	flag = 1;
 				}
 			}
 			else if (check == CANT_RIGHT) {
 				for (int i = 0; i < SIZE; i++) {
-					x = shape[i].getX();
-					shape[i].setX(x - 1);
+					nextStep = board.getCoord(shape[i].getX() - 1, shape[i].getY());
+					if (nextStep != 0) flag = 1;
+				}
+			}
+
+			if (flag) // the shape can't move there because it'll overload another shape
+				break;
+			else //moves the shape in the direction so that it can rotate properly
+			{
+				if (check == CANT_LEFT) {
+					for (int i = 0; i < SIZE; i++) 
+						shape[i].setX(shape[i].getX() + 1);
+				}
+				else if (check == CANT_RIGHT) {
+					for (int i = 0; i < SIZE; i++) 
+						shape[i].setX(shape[i].getX() - 1);
 				}
 			}
 			check = canTheShapeRotate(board);
 		}
 
-		if (check!=CANT_OTHER)
+		if (check==CAN_MOVE)
 			rotate(degree);
 	}
 
